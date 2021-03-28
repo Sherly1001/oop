@@ -3,7 +3,7 @@ package hust.soict.hedspi.aims;
 import hust.soict.hedspi.aims.disc.DigitalVideoDisc;
 import hust.soict.hedspi.aims.order.Order;
 
-public class Aims {
+public class DiskTest {
 	public static void main(String[] args) {
 		Order anOrder = Order.getInstanceOrder();
 
@@ -14,7 +14,7 @@ public class Aims {
 		dvd1.setLength(87);
 		anOrder.addDigitalVideoDisc(dvd1);
 
-		DigitalVideoDisc dvd2 = new DigitalVideoDisc("Start Wars");
+		DigitalVideoDisc dvd2 = new DigitalVideoDisc("Star Wars");
 		dvd2.setCategory("Science Fiction");
 		dvd2.setCost(24.95f);
 		dvd2.setDirector("George Lucas");
@@ -28,13 +28,25 @@ public class Aims {
 		dvd3.setLength(90);
 		anOrder.addDigitalVideoDisc(dvd3);
 
-		// System.out.print("Total cost is: ");
-		// System.out.println(anOrder.totalCost());
+		String pattern = "Wars Star";
+		if (anOrder.search(pattern) == null) {
+			System.out.println("Can't find video with string: " + pattern);
+		} else {
+			System.out.println("Found a video with string: " + pattern);
+		}
 
-		// check remove disc
-		// anOrder.removeDigitalVideoDisc(dvd2);
-		// System.out.println(anOrder.totalCost());
-		anOrder.getALuckyItem();
-		anOrder.printOrdered();
+		pattern = "Lion";
+		if (anOrder.search(pattern) == null) {
+			System.out.println("Can't find video with string: " + pattern);
+		} else {
+			System.out.println("Found a video with string: " + pattern);
+		}
+
+		pattern = "Sherly1001";
+		if (anOrder.search(pattern) == null) {
+			System.out.println("Can't find video with string: " + pattern);
+		} else {
+			System.out.println("Found a video with string: " + pattern);
+		}
 	}
 }
