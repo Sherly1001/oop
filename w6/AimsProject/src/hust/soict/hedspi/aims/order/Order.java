@@ -1,8 +1,9 @@
 package hust.soict.hedspi.aims.order;
 
-import hust.soict.hedspi.aims.disc.DigitalVideoDisc;
+import java.util.ArrayList;
+
+import hust.soict.hedspi.aims.media.Media;
 import hust.soict.hedspi.aims.utils.MyDate;
-import java.lang.Math;
 
 public class Order {
 	public static final int MAX_NUMBERS_ORDERED = 10;
@@ -10,9 +11,8 @@ public class Order {
 
 	private static int nbOrders = 0;
 	private static int luckynumber = 0;
-	private DigitalVideoDisc itemsOrdered[] = new DigitalVideoDisc[MAX_NUMBERS_ORDERED];
-	private int qtyOrdered = 0;
 	private MyDate dateOrdered;
+	private ArrayList<Media> itemsOrdered = new ArrayList<Media>();
 
 	private Order() {
 		dateOrdered = new MyDate();
@@ -30,49 +30,24 @@ public class Order {
 
 	}
 
-	public void addDigitalVideoDisc(DigitalVideoDisc disc) {
-		if (qtyOrdered == MAX_NUMBERS_ORDERED - 1) {
-			System.out.println("The order is almost full");
-		} else {
-			itemsOrdered[qtyOrdered] = disc;
-			++qtyOrdered;
-			System.out.println("The disc has been added");
-		}
+	public void addMedia(Media m) {
+		itemsOrdered.add(m);
 	}
 
-	public void addDigitalVideoDisc(DigitalVideoDisc[] dvds) {
-		for (DigitalVideoDisc i : dvds) {
-			addDigitalVideoDisc(i);
-		}
+	public void removeMedia(Media m) {
+		itemsOrdered.remove(m);
 	}
-
-	public void removeDigitalVideoDisc(DigitalVideoDisc disc) {
-		if (qtyOrdered == 0) {
-			System.out.println("The order is empty");
-			return;
-		}
-
-		for (int i = 0; i < qtyOrdered; ++i) {
-			if (itemsOrdered[i] != disc)
-				continue;
-			for (int j = i; j < qtyOrdered - 1; ++j) {
-				itemsOrdered[j] = itemsOrdered[j + 1];
-			}
-			--qtyOrdered;
-			System.out.println("The disc has been removed");
-			break;
-		}
+	
+	public void removeMedia(int id) {
+		itemsOrdered.remove(id);
 	}
 
 	public float totalCost() {
-		float t = 0;
-		for (int i = 0; i < qtyOrdered; ++i) {
-			if (i == luckynumber) {
-			} else {
-				t += itemsOrdered[i].getCost();
-			}
+		float sum = 0;
+		for (Media i : itemsOrdered) {
+			sum += i.getCost();
 		}
-		return t;
+		return sum;
 	}
 
 	public void printOrdered() {
@@ -80,35 +55,27 @@ public class Order {
 		System.out.print("Date: ");
 		dateOrdered.print();
 		System.out.print("\nOrdered Items:\n");
-		for (int i = 0; i < qtyOrdered; i++) {
-			if (i == luckynumber) {
-				System.out.printf(
-						"%d. DVD - " + itemsOrdered[i].getTitle() + " - " + itemsOrdered[i].getCategory() + " - "
-								+ itemsOrdered[i].getDirector() + " - %d: 0$(Lucky Item)\n",
-						i, itemsOrdered[i].getLength());
-			} else {
-				System.out.printf(
-						"%d. DVD - " + itemsOrdered[i].getTitle() + " - " + itemsOrdered[i].getCategory() + " - "
-								+ itemsOrdered[i].getDirector() + " - %d: %.2f $\n",
-						i, itemsOrdered[i].getLength(), itemsOrdered[i].getCost());
-			}
+		int id = 0;
+		for (Media i : itemsOrdered) {
+			System.out.println(id++ + ": " + i.getTitle() + " - " + i.getCategory()
+			  + " - " + i.getCost());
 		}
 		System.out.printf("Total cost: %.2f\n", totalCost());
 		System.out.println("***************************************************");
 	}
 
-	public DigitalVideoDisc getALuckyItem() {
+	public Media getALuckyItem() {
 		// System.out.print(qtyOrdered+ "\n");
-		luckynumber = (int) (Math.random() * qtyOrdered);
-		String s = itemsOrdered[luckynumber].getTitle();
+		luckynumber = (int) (Math.random() * itemsOrdered.size());
+		String s = itemsOrdered.get(luckynumber).getTitle();
 		System.out.printf("The lucky item is : " + s + "\n");
-		return itemsOrdered[luckynumber];
+		return itemsOrdered.get(luckynumber);
 	}
 
-	public DigitalVideoDisc search(String title) {
-		for (int i = 0; i < qtyOrdered; ++i) {
-			if (itemsOrdered[i].search(title))
-				return itemsOrdered[i];
+	public Media search(String title) {
+		for (Media i : itemsOrdered) {
+			if (i.search(title))
+				return i;
 		}
 		return null;
 	}

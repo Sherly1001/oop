@@ -1,40 +1,59 @@
 package hust.soict.hedspi.aims;
 
-import hust.soict.hedspi.aims.disc.DigitalVideoDisc;
+import java.util.Scanner;
+
+import hust.soict.hedspi.aims.media.Media;
 import hust.soict.hedspi.aims.order.Order;
 
 public class Aims {
 	public static void main(String[] args) {
-		Order anOrder = Order.getInstanceOrder();
+		Scanner scanner = new Scanner(System.in);
+		Order order = null;
 
-		DigitalVideoDisc dvd1 = new DigitalVideoDisc("The Lion King");
-		dvd1.setCategory("Animatin");
-		dvd1.setCost(19.95f);
-		dvd1.setDirector("Roger Allers");
-		dvd1.setLength(87);
-		anOrder.addDigitalVideoDisc(dvd1);
+		while (true) {
+			showMenu();
+			int choice = scanner.nextInt();
+			if (choice < 0 || choice > 4) {
+				System.out.println("Invalid choice");
+				continue;
+			}
 
-		DigitalVideoDisc dvd2 = new DigitalVideoDisc("Start Wars");
-		dvd2.setCategory("Science Fiction");
-		dvd2.setCost(24.95f);
-		dvd2.setDirector("George Lucas");
-		dvd2.setLength(124);
-		anOrder.addDigitalVideoDisc(dvd2);
+			switch (choice) {
+			case 1:
+				order = Order.getInstanceOrder();
+				break;
+			case 2:
+				System.out.print("Enter title: ");
+				String tit = scanner.next();
+				System.out.print("Enter category: ");
+				String cat = scanner.next();
+				System.out.print("Enter cost: ");
+				float co = scanner.nextFloat();
+				order.addMedia(new Media(tit, cat, co));
+				break;
+			case 3:
+				System.out.print("Enter item's id: ");
+				order.removeMedia(scanner.nextInt());
+				break;
+			case 4:
+				if (order != null) order.printOrdered();
+				break;
+			case 0:
+				scanner.close();
+				System.exit(0);
+			}
+		}
+	}
 
-		DigitalVideoDisc dvd3 = new DigitalVideoDisc("Aladin");
-		dvd3.setCategory("Animatin");
-		dvd3.setCost(18.99f);
-		dvd3.setDirector("Jonh Musker");
-		dvd3.setLength(90);
-		anOrder.addDigitalVideoDisc(dvd3);
-
-		// System.out.print("Total cost is: ");
-		// System.out.println(anOrder.totalCost());
-
-		// check remove disc
-		// anOrder.removeDigitalVideoDisc(dvd2);
-		// System.out.println(anOrder.totalCost());
-		anOrder.getALuckyItem();
-		anOrder.printOrdered();
+	public static void showMenu() {
+		System.out.println("Order Management Application: ");
+		System.out.println("--------------------------------");
+		System.out.println("1. Create new order");
+		System.out.println("2. Add item to the order");
+		System.out.println("3. Delete item by id");
+		System.out.println("4. Display the items list of order");
+		System.out.println("0. Exit");
+		System.out.println("--------------------------------");
+		System.out.print("Please choose a number: ");
 	}
 }
