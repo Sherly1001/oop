@@ -2,6 +2,7 @@ package hust.soict.hedspi.aims;
 
 import java.util.Scanner;
 
+import hust.soict.hedspi.aims.media.Book;
 import hust.soict.hedspi.aims.media.Media;
 import hust.soict.hedspi.aims.order.Order;
 
@@ -9,6 +10,7 @@ public class Aims {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		Order order = null;
+		boolean makedOrder = false;
 
 		while (true) {
 			showMenu();
@@ -17,19 +19,44 @@ public class Aims {
 				System.out.println("Invalid choice");
 				continue;
 			}
+			
+			if (!makedOrder && choice != 1 && choice != 0) {
+				System.out.println("Please make an order!");
+				continue;
+			}
 
 			switch (choice) {
 			case 1:
 				order = Order.getInstanceOrder();
+				makedOrder = true;
 				break;
 			case 2:
-				System.out.print("Enter title: ");
-				String tit = scanner.next();
-				System.out.print("Enter category: ");
-				String cat = scanner.next();
-				System.out.print("Enter cost: ");
-				float co = scanner.nextFloat();
-				order.addMedia(new Media(tit, cat, co));
+				int type = 0;
+				while (true) {
+					System.out.println("Enter type of media:\n1. Book\n2. Compact Disc\n3. Digital Video Disc");
+					type = scanner.nextInt();
+					if (type < 1 || type > 3) {
+						System.out.println("Rechoice!");
+					} else {
+						break;
+					}
+				}
+				Media media;
+				String tit, cat;
+				float cost;
+				switch (type) {
+				case 1:
+					System.out.print("Enter book's title: ");
+					tit = scanner.next();
+					System.out.print("Enter book's category: ");
+					cat = scanner.next();
+					System.out.print("Enter book's cost: ");
+					cost = scanner.nextFloat();
+					media = new Book(tit, cat, cost);
+					break;
+				case 2:
+					
+				}
 				break;
 			case 3:
 				System.out.print("Enter item's id: ");

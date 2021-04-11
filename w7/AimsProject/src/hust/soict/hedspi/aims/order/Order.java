@@ -27,7 +27,6 @@ public class Order {
 			System.out.println("The numbers of orders is almost max.");
 			return null;
 		}
-
 	}
 
 	public void addMedia(Media m) {

@@ -13,6 +13,10 @@ public class Book extends Media {
 	public Book(String title, String category) {
 		super(title, category);
 	}
+	
+	public Book(String title, String category, float cost) {
+		super(title, category, cost);
+	}
 
 	public Book(String title, String category, float cost, List<String> authors) {
 		super(title, category, cost);
