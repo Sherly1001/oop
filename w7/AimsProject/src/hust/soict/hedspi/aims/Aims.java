@@ -3,11 +3,18 @@ package hust.soict.hedspi.aims;
 import java.util.Scanner;
 
 import hust.soict.hedspi.aims.media.Book;
+import hust.soict.hedspi.aims.media.CompactDisc;
+import hust.soict.hedspi.aims.media.DigitalVideoDisc;
 import hust.soict.hedspi.aims.media.Media;
 import hust.soict.hedspi.aims.order.Order;
+import hust.soict.hedspi.aims.media.Track;
 
 public class Aims {
 	public static void main(String[] args) {
+		Thread memLog = new Thread(new MemoryDaemon(), "Memory Log");
+		memLog.setDaemon(true);
+		memLog.start();
+		
 		Scanner scanner = new Scanner(System.in);
 		Order order = null;
 		boolean makedOrder = false;
@@ -42,8 +49,9 @@ public class Aims {
 					}
 				}
 				Media media;
-				String tit, cat;
+				String tit, cat, dir;
 				float cost;
+				int length;
 				switch (type) {
 				case 1:
 					System.out.print("Enter book's title: ");
@@ -55,7 +63,40 @@ public class Aims {
 					media = new Book(tit, cat, cost);
 					break;
 				case 2:
-					
+					System.out.print("Enter artist: ");
+					tit = scanner.next();
+					media = new CompactDisc();
+					((CompactDisc)media).setArtist(tit);
+					while (true) {
+						System.out.print("Enter track's title: ");
+						tit = scanner.next();
+						System.out.print("Enter track's length: ");
+						length = scanner.nextInt();
+						((CompactDisc)media).addTrack(new Track(tit, length));
+						System.out.print("Add more track? (y/n): ");
+						if ('y' != scanner.next().charAt(0)) break;
+					}
+					if ('y' == scanner.next().charAt(0)) {
+						((CompactDisc)media).play();
+					}
+					break;
+				case 3:
+					System.out.print("Enter dvd's title: ");
+					tit = scanner.next();
+					System.out.print("Enter dvd's category: ");
+					cat = scanner.next();
+					System.out.print("Enter dvd's directory: ");
+					dir = scanner.next();
+					System.out.print("Enter dvd's length: ");
+					length = scanner.nextInt();
+					System.out.print("Enter dvd's cost: ");
+					cost = scanner.nextFloat();
+					media = new DigitalVideoDisc(tit, cat, dir, length, cost);
+					if ('y' == scanner.next().charAt(0)) {
+						((DigitalVideoDisc)media).play();
+					}
+					break;
+				default:
 				}
 				break;
 			case 3:
